@@ -1,0 +1,17 @@
+{
+	"mcpServers": {
+		"tiendanube": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@commenteme/tiendanube-mcp"]
+		},
+		"tiendanube-admin": {
+			"type": "http",
+			"url": "https://admin-mcp.tiendanube.com/mcp"
+		},
+		"nuvemshop-admin": {
+			"type": "http",
+			"url": "https://admin-mcp.nuvemshop.com.br/mcp"
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"$schema": "https://code.claude.com/schemas/marketplace.json",
+	"name": "tiendanube-agents",
+	"owner": {
+		"name": "José Luiz Rodrigues",
+		"url": "https://github.com/zeluizr"
+	},
+	"description": "Subagentes de Claude Code para desarrollar y operar en Tiendanube y Nuvemshop, con el servidor MCP tiendanube-mcp y el Admin MCP oficial, construidos sobre las skills tiendanube-skills.",
+	"version": "0.1.0",
+	"metadata": {
+		"pluginRoot": "./plugins"
+	},
+	"plugins": [
+		{
+			"name": "tiendanube-agents",
+			"source": "tiendanube-agents",
+			"displayName": "Tiendanube Agents",
+			"description": "Seis subagentes para Tiendanube y Nuvemshop (exploración, revisión previa al deploy, QA, arquitectura de integraciones, documentación y consulta de la tienda) más el servidor MCP tiendanube-mcp y el Admin MCP oficial de la plataforma.",
+			"version": "0.1.0",
+			"author": { "name": "José Luiz Rodrigues", "url": "https://github.com/zeluizr" },
+			"homepage": "https://github.com/commentemeapp/tiendanube-agents",
+			"repository": "https://github.com/commentemeapp/tiendanube-agents",
+			"license": "MIT",
+			"category": "development",
+			"keywords": ["tiendanube", "nuvemshop", "ecommerce", "subagents", "mcp", "latam"]
+		}
+	]
+}
