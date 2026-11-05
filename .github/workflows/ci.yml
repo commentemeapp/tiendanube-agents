@@ -1,0 +1,49 @@
+# Gate del repositorio en cada push y pull request de las dos ramas.
+# El mismo ./scripts/verificar.sh que se corre en la máquina.
+name: ci
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: gate del repositorio
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Para `claude plugin validate`, que no necesita sesión iniciada.
+      - run: npm install --global @anthropic-ai/claude-code
+      - run: ./scripts/verificar.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  mcp:
+    name: el servidor MCP arranca y lista sus herramientas
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # Ejecuta el mismo comando que .mcp.json (npx -y @commenteme/tiendanube-mcp) y pide la
+      # lista de tools por stdio: si el paquete deja de publicarse o cambia el nombre de una
+      # tool que un agente usa, falla aquí y no en la sesión de quien instaló el plugin.
+      # Falla también mientras el paquete no esté publicado en npm.
+      - run: node scripts/probar-mcp.mjs
