@@ -1,0 +1,20 @@
+{
+	"name": "tiendanube-agents",
+	"version": "0.2.0",
+	"description": "Seis subagentes para Tiendanube y Nuvemshop (exploración, revisión previa al deploy, QA, arquitectura de integraciones, documentación y consulta de la tienda) más el servidor MCP tiendanube-mcp y el Admin MCP oficial de la plataforma.",
+	"mcpServers": {
+		"tiendanube": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@commenteme/tiendanube-mcp"
+			]
+		},
+		"tiendanube-admin": {
+			"httpUrl": "https://admin-mcp.tiendanube.com/mcp"
+		},
+		"nuvemshop-admin": {
+			"httpUrl": "https://admin-mcp.nuvemshop.com.br/mcp"
+		}
+	}
+}

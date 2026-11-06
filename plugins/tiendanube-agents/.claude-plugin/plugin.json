@@ -2,7 +2,7 @@
 	"name": "tiendanube-agents",
 	"displayName": "Tiendanube Agents",
 	"description": "Seis subagentes para Tiendanube y Nuvemshop (exploración, revisión previa al deploy, QA, arquitectura de integraciones, documentación y consulta de la tienda) más el servidor MCP tiendanube-mcp y el Admin MCP oficial de la plataforma.",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"author": { "name": "José Luiz Rodrigues", "url": "https://github.com/zeluizr" },
 	"homepage": "https://github.com/commentemeapp/tiendanube-agents",
 	"repository": "https://github.com/commentemeapp/tiendanube-agents",
