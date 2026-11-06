@@ -5,6 +5,17 @@ y las versiones siguen [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+## [0.2.0] - 2026-11-06
+
+### Agregado
+
+- Versiones de los agentes para Gemini CLI (extensión con `gemini-extension.json` y `agents/` en la raíz),
+  Codex (`adaptadores/codex/`), GitHub Copilot (`adaptadores/copilot/`) y Cursor (`adaptadores/cursor/`), generadas
+  desde los agentes de Claude Code con `scripts/exportar.mjs`.
+- El gate comprueba que esas versiones coinciden con su fuente.
+
+Los agentes de Claude Code no cambian.
+
 ## [0.1.0] - 2026-11-05
 
 ### Agregado

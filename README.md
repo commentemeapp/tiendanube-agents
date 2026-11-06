@@ -73,6 +73,32 @@ Ningún agente precarga mas de cuatro skills ni tiene `Write`, `Edit` o `Noteboo
 
 Los agentes son de solo lectura sobre el código y sobre la tienda: exploran, revisan, diseñan y proponen. Escribir archivos, registrar webhooks, publicar o cambiar datos de la tienda es decisión de la conversación principal y de la persona. El `tiendanube-store-operator` responde con datos reales, sin guardar datos de compradores en su memoria.
 
+### En otros agentes
+
+Los seis agentes también funcionan en Gemini CLI, Codex, GitHub Copilot y Cursor. Cada versión se genera desde los archivos de
+Claude Code con `scripts/exportar.mjs`: cambian el frontmatter y los nombres de las herramientas, el texto es el
+mismo. Fuera de Claude Code no hay skills precargadas, así que cada agente empieza diciendo cuales cargar; se instalan
+con `npx skills add <repositorio> -a <agente>`.
+
+| Agente         | Instalación                                                                                                                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Gemini CLI     | `gemini extensions install https://github.com/commentemeapp/tiendanube-agents`: trae los seis agentes y el servidor MCP (`tiendanube`, `tiendanube-admin`, `nuvemshop-admin`)                                                         |
+| Codex          | Copia `adaptadores/codex/*.toml` a `~/.codex/agents/` y agrega el servidor MCP con los comandos de abajo                                                                                                                              |
+| GitHub Copilot | Copia `adaptadores/copilot/*.agent.md` a `~/.copilot/agents/` o a `.github/agents/` del proyecto; el servidor MCP va en `~/.copilot/mcp-config.json`, con el mismo `mcpServers` de [`.mcp.json`](plugins/tiendanube-agents/.mcp.json) |
+| Cursor         | Copia `adaptadores/cursor/*.md` a `~/.cursor/agents/` o a `.cursor/agents/` del proyecto; el servidor MCP va en `~/.cursor/mcp.json`, con el mismo `mcpServers`                                                                       |
+
+```bash
+codex mcp add tiendanube -- npx -y @commenteme/tiendanube-mcp
+codex mcp add tiendanube-admin --url https://admin-mcp.tiendanube.com/mcp
+codex mcp add nuvemshop-admin --url https://admin-mcp.nuvemshop.com.br/mcp
+```
+
+Los servidores remotos (`tiendanube-admin`, `nuvemshop-admin`) piden iniciar sesión la primera vez, como en Claude Code.
+
+En Copilot, las herramientas MCP van como `<servidor>/<herramienta>`; en Gemini CLI, como `mcp_<servidor>_<herramienta>`;
+en Codex y Cursor, el agente hereda las del servidor configurado. Cursor no tiene lista de herramientas por agente: los
+agentes que no escriben van con `readonly: true`.
+
 ### Actualizar y desinstalar
 
 ```bash
