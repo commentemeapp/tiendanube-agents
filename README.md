@@ -1,13 +1,12 @@
-<p align="center">
-  <img src="assets/banner.png" width="100%" alt="tiendanube-agents · Seis subagentes y el servidor MCP para desarrollar y operar en Tiendanube y Nuvemshop">
-</p>
+![tiendanube-agents · Seis subagentes y el servidor MCP para desarrollar y operar en Tiendanube y Nuvemshop](.github/assets/banner.png)
 
 # tiendanube-agents
 
 **Seis subagentes de Claude Code y el servidor MCP para desarrollar y operar en Tiendanube y Nuvemshop.**
 
-![version](https://img.shields.io/github/package-json/v/commentemeapp/tiendanube-agents/main?filename=plugins%2Ftiendanube-agents%2F.claude-plugin%2Fplugin.json&label=version&labelColor=005278&color=FFBD38)
-![license](https://img.shields.io/github/license/commentemeapp/tiendanube-agents?labelColor=005278&color=FFBD38)
+[![versión](https://badgen.net/github/tag/commentemeapp/tiendanube-agents?color=005278)](./CHANGELOG.md)
+[![licencia](https://badgen.net/github/license/commentemeapp/tiendanube-agents)](./LICENSE)
+[![último commit](https://badgen.net/github/last-commit/commentemeapp/tiendanube-agents/main)](https://github.com/commentemeapp/tiendanube-agents/commits/main)
 
 ## Instalación
 
@@ -131,7 +130,7 @@ npm ci
 npm run verificar
 ```
 
-`scripts/verificar.sh` es el gate, el mismo que corre el CI: JSON válido; la misma versión en los tres manifiestos; `.mcp.json` con `npx -y @commenteme/tiendanube-mcp` y las dos URLs oficiales del Admin MCP; el frontmatter de cada agente (`name` igual al archivo, `Skill` presente, sin `Write` ni `Edit`, herramientas MCP solo de los tres servidores, como mucho cuatro skills); que cada skill precargada exista en la rama `main` de tiendanube-skills; `claude plugin validate --strict`; Prettier; `bash -n`, y una búsqueda de rastros.
+`scripts/verificar.sh` es el gate y corre en tu máquina antes de cada merge (no hay CI en GitHub): JSON válido; la misma versión en los tres manifiestos; `.mcp.json` con `npx -y @commenteme/tiendanube-mcp` y las dos URLs oficiales del Admin MCP; el frontmatter de cada agente (`name` igual al archivo, `Skill` presente, sin `Write` ni `Edit`, herramientas MCP solo de los tres servidores, como mucho cuatro skills); que cada skill precargada exista en la rama `main` de tiendanube-skills; `claude plugin validate --strict`; Prettier; `bash -n`, y una búsqueda de rastros.
 
 Para probar el servidor antes de publicarlo en npm:
 
@@ -139,7 +138,7 @@ Para probar el servidor antes de publicarlo en npm:
 TIENDANUBE_MCP=../tiendanube-mcp/build/index.js node scripts/probar-mcp.mjs
 ```
 
-Las herramientas del Admin MCP oficial no se prueban en el CI: piden OAuth con una tienda real. Sus nombres salen de la [documentación del Admin MCP](https://nuvemshop.dev/en-US/ai-agents/admin-mcp.md).
+Las herramientas del Admin MCP oficial no se prueban en el gate: piden OAuth con una tienda real. Sus nombres salen de la [documentación del Admin MCP](https://nuvemshop.dev/en-US/ai-agents/admin-mcp.md).
 
 ## Contribuir · Licencia
 
@@ -147,6 +146,4 @@ Abre un PR contra `dev` con Conventional Commits; la promoción a `main` es merg
 
 [MIT](LICENSE).
 
----
-
-Hecho por [commente.me](https://www.commente.me) · hablecon@commente.me
+_Hecho con amor y café por [zeluizr](https://github.com/zeluizr) y con la ayuda de [Claude](https://claude.ai/referral/Cz_UimA0NQ) ☕_
