@@ -4,9 +4,7 @@
 
 **Seis subagentes de Claude Code y el servidor MCP para desarrollar y operar en Tiendanube y Nuvemshop.**
 
-[![versión](https://badgen.net/github/tag/commentemeapp/tiendanube-agents?color=005278)](./CHANGELOG.md)
-[![licencia](https://badgen.net/github/license/commentemeapp/tiendanube-agents)](./LICENSE)
-[![último commit](https://badgen.net/github/last-commit/commentemeapp/tiendanube-agents/main)](https://github.com/commentemeapp/tiendanube-agents/commits/main)
+Versión 0.2.0 · en desarrollo. Cambios en [CHANGELOG.md](CHANGELOG.md).
 
 ## Instalación
 
@@ -16,61 +14,6 @@
 ```
 
 Reinicia Claude Code o corre `/reload-plugins`. Los agentes aparecen en el typeahead de `@` como `tiendanube-agents:tiendanube-reviewer`, y los servidores MCP como `tiendanube`, `tiendanube-admin` y `nuvemshop-admin`. Para consultar una tienda, conecta el Admin MCP de su marca con `/mcp` y autoriza la tienda.
-
-## Uso rápido
-
-Por mención:
-
-```
-@tiendanube-agents:tiendanube-reviewer revisa lo que acabo de cambiar en el receptor de webhooks
-```
-
-Por lenguaje natural, sin nombrarlos:
-
-```
-diseña la sincronización de stock por location entre el ERP y las dos tiendas
-```
-
-Por sesión completa:
-
-```bash
-claude --agent tiendanube-agents:tiendanube-integration-architect
-```
-
-El servidor MCP también responde directo en la conversación: "que scope necesita `POST /orders/{id}/fulfillment-orders`?", "arma el receptor de webhooks para `order/paid` con la verificación de firma".
-
-## Que incluye
-
-Para apps de partners, integraciones propias y la operación de tiendas: Admin API, OAuth, webhooks, catálogo, pedidos y fulfillment, NubeSDK, apps del Admin y temas.
-
-| Agente                             | Que hace                                                                                                   | Skills que precarga                                                                                        | Herramientas MCP                                                                                               | Modelo    |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------- |
-| `tiendanube-explorer`              | Mapea el proyecto: OAuth, llamadas a la Admin API, webhooks, NubeSDK y panel del Admin. Read-only.         | `tiendanube-admin-apps`, `tiendanube-nube-sdk`                                                             | `lookup-endpoint`, `lookup-webhook-event`                                                                      | haiku     |
-| `tiendanube-reviewer`              | Revisa el diff antes del deploy: OAuth, firma de webhooks, uso de la Admin API, NubeSDK.                   | `tiendanube-oauth-apps`, `tiendanube-webhooks`, `tiendanube-rest-api`, `tiendanube-nube-sdk`               | `search-docs`, `read-doc`, `lookup-endpoint`, `lookup-scope`, `lookup-webhook-event`                           | `inherit` |
-| `tiendanube-qa`                    | Corre lint, tipos, pruebas y build del proyecto y devuelve solo las fallas.                                | `tiendanube-rest-api`, `tiendanube-webhooks`                                                               | ninguna, a propósito                                                                                           | sonnet    |
-| `tiendanube-integration-architect` | Diseña y audita integraciones con ERP, OMS, WMS y PIM y migraciones: dueño de cada dato, flujos y límites. | `tiendanube-erp-integration`, `tiendanube-orders-fulfillment`, `tiendanube-catalog`, `tiendanube-webhooks` | `search-docs`, `read-doc`, `lookup-endpoint`, `lookup-scope`, `lookup-webhook-event`                           | opus      |
-| `tiendanube-docs-researcher`       | Busca en la documentación oficial y cita siempre la fuente.                                                | ninguna, a propósito                                                                                       | `search-docs`, `read-doc`, `lookup-endpoint`, `lookup-scope`, `lookup-webhook-event`                           | haiku     |
-| `tiendanube-store-operator`        | Consulta una tienda conectada por el Admin MCP oficial y propone los cambios, sin aplicarlos.              | `tiendanube-catalog`, `tiendanube-orders-fulfillment`                                                      | las 12 de lectura del Admin MCP (productos, categorías, pedidos, clientes, cupones, promociones, pago y envío) | `inherit` |
-
-Los servidores MCP:
-
-- **`tiendanube`**: [tiendanube-mcp](https://github.com/commentemeapp/tiendanube-mcp), ejecutado con `npx -y @commenteme/tiendanube-mcp`. Documentación oficial en vivo, índices de endpoints, scopes y eventos de webhook, y scaffolding. No pide credenciales. Las herramientas de scaffolding (`scaffold-webhook-handler`, `scaffold-oauth-callback`) quedan para la conversación principal: ningún agente las declara.
-- **`tiendanube-admin`** y **`nuvemshop-admin`**: el [Admin MCP oficial](https://nuvemshop.dev/en-US/ai-agents/admin-mcp.md) de la plataforma, por HTTP, uno por marca. Cada conexión opera sobre una tienda autorizada con OAuth. El agente operador solo tiene las herramientas de lectura; las de escritura y borrado quedan en la conversación principal, que pide confirmación.
-
-Ningún agente precarga mas de cuatro skills ni tiene `Write`, `Edit` o `NotebookEdit`. Las skills salen de [tiendanube-skills](https://github.com/commentemeapp/tiendanube-skills). Código abierto y sin costo.
-
-## Documentación
-
-### Requisitos
-
-- Claude Code con soporte de plugins.
-- Node `>= 18` para el servidor `tiendanube` (lo ejecuta `npx`).
-- Las skills: `npx skills add commentemeapp/tiendanube-skills`. Sin ellas, los agentes funcionan, pero sin el criterio precargado.
-- Para el operador, una cuenta con acceso a la tienda que se va a conectar.
-
-### Como funciona
-
-Los agentes son de solo lectura sobre el código y sobre la tienda: exploran, revisan, diseñan y proponen. Escribir archivos, registrar webhooks, publicar o cambiar datos de la tienda es decisión de la conversación principal y de la persona. El `tiendanube-store-operator` responde con datos reales, sin guardar datos de compradores en su memoria.
 
 ### En otros agentes
 
@@ -105,21 +48,60 @@ agentes que no escriben van con `readonly: true`.
 /plugin uninstall tiendanube-agents@tiendanube-agents
 ```
 
-### Estructura
+## Uso
 
-```text
-.claude-plugin/marketplace.json           el marketplace
-plugins/tiendanube-agents/
-  .claude-plugin/plugin.json              el plugin
-  .mcp.json                               tiendanube, tiendanube-admin y nuvemshop-admin
-  agents/                                 los seis agentes
-scripts/
-  verificar.sh                            el gate
-  probar-mcp.mjs                          arranca el servidor tiendanube y compara sus tools con las de los agentes
-  skills-existen.mjs                      comprueba las skills precargadas en tiendanube-skills
+Por mención:
+
+```
+@tiendanube-agents:tiendanube-reviewer revisa lo que acabo de cambiar en el receptor de webhooks
 ```
 
-### Desarrollo
+Por lenguaje natural, sin nombrarlos:
+
+```
+diseña la sincronización de stock por location entre el ERP y las dos tiendas
+```
+
+Por sesión completa:
+
+```bash
+claude --agent tiendanube-agents:tiendanube-integration-architect
+```
+
+El servidor MCP también responde directo en la conversación: "que scope necesita `POST /orders/{id}/fulfillment-orders`?", "arma el receptor de webhooks para `order/paid` con la verificación de firma".
+
+### Que incluye
+
+Para apps de partners, integraciones propias y la operación de tiendas: Admin API, OAuth, webhooks, catálogo, pedidos y fulfillment, NubeSDK, apps del Admin y temas.
+
+| Agente                             | Que hace                                                                                                   | Skills que precarga                                                                                        | Herramientas MCP                                                                                               | Modelo    |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------- |
+| `tiendanube-explorer`              | Mapea el proyecto: OAuth, llamadas a la Admin API, webhooks, NubeSDK y panel del Admin. Read-only.         | `tiendanube-admin-apps`, `tiendanube-nube-sdk`                                                             | `lookup-endpoint`, `lookup-webhook-event`                                                                      | haiku     |
+| `tiendanube-reviewer`              | Revisa el diff antes del deploy: OAuth, firma de webhooks, uso de la Admin API, NubeSDK.                   | `tiendanube-oauth-apps`, `tiendanube-webhooks`, `tiendanube-rest-api`, `tiendanube-nube-sdk`               | `search-docs`, `read-doc`, `lookup-endpoint`, `lookup-scope`, `lookup-webhook-event`                           | `inherit` |
+| `tiendanube-qa`                    | Corre lint, tipos, pruebas y build del proyecto y devuelve solo las fallas.                                | `tiendanube-rest-api`, `tiendanube-webhooks`                                                               | ninguna, a propósito                                                                                           | sonnet    |
+| `tiendanube-integration-architect` | Diseña y audita integraciones con ERP, OMS, WMS y PIM y migraciones: dueño de cada dato, flujos y límites. | `tiendanube-erp-integration`, `tiendanube-orders-fulfillment`, `tiendanube-catalog`, `tiendanube-webhooks` | `search-docs`, `read-doc`, `lookup-endpoint`, `lookup-scope`, `lookup-webhook-event`                           | opus      |
+| `tiendanube-docs-researcher`       | Busca en la documentación oficial y cita siempre la fuente.                                                | ninguna, a propósito                                                                                       | `search-docs`, `read-doc`, `lookup-endpoint`, `lookup-scope`, `lookup-webhook-event`                           | haiku     |
+| `tiendanube-store-operator`        | Consulta una tienda conectada por el Admin MCP oficial y propone los cambios, sin aplicarlos.              | `tiendanube-catalog`, `tiendanube-orders-fulfillment`                                                      | las 12 de lectura del Admin MCP (productos, categorías, pedidos, clientes, cupones, promociones, pago y envío) | `inherit` |
+
+Los servidores MCP:
+
+- **`tiendanube`**: [tiendanube-mcp](https://github.com/commentemeapp/tiendanube-mcp), ejecutado con `npx -y @commenteme/tiendanube-mcp`. Documentación oficial en vivo, índices de endpoints, scopes y eventos de webhook, y scaffolding. No pide credenciales. Las herramientas de scaffolding (`scaffold-webhook-handler`, `scaffold-oauth-callback`) quedan para la conversación principal: ningún agente las declara.
+- **`tiendanube-admin`** y **`nuvemshop-admin`**: el [Admin MCP oficial](https://nuvemshop.dev/en-US/ai-agents/admin-mcp.md) de la plataforma, por HTTP, uno por marca. Cada conexión opera sobre una tienda autorizada con OAuth. El agente operador solo tiene las herramientas de lectura; las de escritura y borrado quedan en la conversación principal, que pide confirmación.
+
+Ningún agente precarga mas de cuatro skills ni tiene `Write`, `Edit` o `NotebookEdit`. Las skills salen de [tiendanube-skills](https://github.com/commentemeapp/tiendanube-skills). Código abierto y sin costo.
+
+### Como funciona
+
+Los agentes son de solo lectura sobre el código y sobre la tienda: exploran, revisan, diseñan y proponen. Escribir archivos, registrar webhooks, publicar o cambiar datos de la tienda es decisión de la conversación principal y de la persona. El `tiendanube-store-operator` responde con datos reales, sin guardar datos de compradores en su memoria.
+
+## Requisitos
+
+- Claude Code con soporte de plugins.
+- Node `>= 18` para el servidor `tiendanube` (lo ejecuta `npx`).
+- Las skills: `npx skills add commentemeapp/tiendanube-skills`. Sin ellas, los agentes funcionan, pero sin el criterio precargado.
+- Para el operador, una cuenta con acceso a la tienda que se va a conectar.
+
+## Desarrollo
 
 Pide Node `>= 20`.
 
@@ -140,10 +122,30 @@ TIENDANUBE_MCP=../tiendanube-mcp/build/index.js node scripts/probar-mcp.mjs
 
 Las herramientas del Admin MCP oficial no se prueban en el gate: piden OAuth con una tienda real. Sus nombres salen de la [documentación del Admin MCP](https://nuvemshop.dev/en-US/ai-agents/admin-mcp.md).
 
-## Contribuir · Licencia
+### Contribuir
 
 Abre un PR contra `dev` con Conventional Commits; la promoción a `main` es merge de la rama entera `dev`.
 
+## Estructura
+
+```text
+.claude-plugin/marketplace.json           el marketplace
+plugins/tiendanube-agents/
+  .claude-plugin/plugin.json              el plugin
+  .mcp.json                               tiendanube, tiendanube-admin y nuvemshop-admin
+  agents/                                 los seis agentes
+scripts/
+  verificar.sh                            el gate
+  probar-mcp.mjs                          arranca el servidor tiendanube y compara sus tools con las de los agentes
+  skills-existen.mjs                      comprueba las skills precargadas en tiendanube-skills
+```
+
+## Licencia
+
 [MIT](LICENSE).
+
+Contacto: hablecon@commente.me
+
+---
 
 _Hecho con amor y café por [zeluizr](https://github.com/zeluizr) y con la ayuda de [Claude](https://claude.ai/referral/Cz_UimA0NQ) ☕_
